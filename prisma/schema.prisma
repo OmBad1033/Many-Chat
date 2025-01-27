@@ -29,9 +29,10 @@ model Subscription {
   id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   User       User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String?           @unique @db.Uuid
+  createdAt  DateTime          @default(now())
   plan       SUBSCRIPTION_PLAN @default(FREE)
   updatedAt  DateTime          @default(now())
-  customerId String            @unique
+  customerId String?           @unique
 }
 
 enum SUBSCRIPTION_PLAN {
