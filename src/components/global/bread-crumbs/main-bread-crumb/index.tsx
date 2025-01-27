@@ -7,7 +7,8 @@ type Props = {
 };
 
 function MainBreadCrumb({ page, slug }: Props) {
-    console.log("page23232", page);
+    console.log("MainBreadCrumb page", page);
+    console.log("MainBreadCrumb slug", slug);
   return (
     <div className="flex flex-col items-start">
       {page === "Home" && (

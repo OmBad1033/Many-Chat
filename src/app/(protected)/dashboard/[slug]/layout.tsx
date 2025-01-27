@@ -9,6 +9,7 @@ type Props = {
 
 const layout = ({ children, params }: Props) => {
   //WIP: Query client and fetch data
+
   return (
     <div className="p-3">
       <Sidebar slug={params.slug} />

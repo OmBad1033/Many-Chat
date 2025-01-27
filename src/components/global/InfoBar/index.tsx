@@ -15,7 +15,7 @@ import UpgradeCard from "../sidebar/upgrade";
 import CreateAutomation from "../create-automation";
 import Search from "../search";
 import Notifications from "../notifications";
-import MainBreadCrumb from "../main-bread-crumb";
+import MainBreadCrumb from "../bread-crumbs/main-bread-crumb";
 
 type Props = {
   slug: string;
@@ -24,7 +24,7 @@ type Props = {
 function InfoBar({ slug }: Props) {
   const { page } = usePath();
 
-  console.log("slug page", slug, page);
+  console.log("InfoBar slug page", slug, page);
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug;
   return (
     true && (
