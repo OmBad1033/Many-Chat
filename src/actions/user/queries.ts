@@ -1,9 +1,6 @@
-import { Subscription } from './../../../node_modules/.prisma/client/index.d';
 "use server";
 
 import { client } from "@/lib/prisma";
-import exp from "constants";
-import { create } from "domain";
 
 export const findUser = async (clerkId: string) => {
   return await client.user.findUnique({
@@ -17,6 +14,7 @@ export const findUser = async (clerkId: string) => {
           id: true,
           token: true,
           expiresAt: true,
+          name: true,
         },
       },
     },
@@ -36,7 +34,9 @@ export const createUser = async (
         lastname,
         email,
         subscription: {
-            create: {},
+            create: {
+                customerId: "asd"
+            }
         },
       },
       select: {

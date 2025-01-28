@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/provider/theme-provider"
 import { Toaster } from "sonner";
+import ReactQueryProvider from "@/provider/react-query-provider";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -26,7 +27,9 @@ export default function RootLayout({
             defaultTheme="system"
             disableTransitionOnChange
           >
-            {children}
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+
+            
             <Toaster />
           </ThemeProvider>
 
