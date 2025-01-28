@@ -7,7 +7,7 @@ export const updateIntegration = async (
   expire: Date,
   id: string
 ) => {
-  return await client.integration.update({
+  return await client.integrations.update({
     where: { id },
     data: {
       token,
