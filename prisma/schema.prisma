@@ -32,7 +32,6 @@ model Subscription {
   createdAt  DateTime          @default(now())
   plan       SUBSCRIPTION_PLAN @default(FREE)
   updatedAt  DateTime          @default(now())
-  customerId String?           @unique
 }
 
 enum SUBSCRIPTION_PLAN {
