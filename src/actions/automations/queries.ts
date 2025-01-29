@@ -1,35 +1,37 @@
-"use server"
+"use server";
 
-import { client } from "@/lib/prisma"
+import { client } from "@/lib/prisma";
 
-export const createAutomation = async (clerkId: string) => {
-    return await client.user.update({
-        where:{
-            clerkId
+export const createAutomation = async (clerkId: string, id?: string) => {
+  return await client.user.update({
+    where: {
+      clerkId,
+    },
+    data: {
+      automations: {
+        create: {
+          ...(id && { id }),
         },
-        data:{
-            automations:{
-                create: {}
-            }
-        }
-    })
-}
+      },
+    },
+  });
+};
 
 export const getAutomations = async (clerkId: string) => {
-    return await client.user.findUnique({
-        where: {
-            clerkId
+  return await client.user.findUnique({
+    where: {
+      clerkId,
+    },
+    select: {
+      automations: {
+        orderBy: {
+          createdAt: "asc",
         },
-        select: {
-            automations: {
-                orderBy: {
-                    createdAt: 'asc'
-                },
-                include:{
-                    keywords:true,
-                    listener: true
-                },
-            },
+        include: {
+          keywords: true,
+          listener: true,
         },
-    })
-}
+      },
+    },
+  });
+};

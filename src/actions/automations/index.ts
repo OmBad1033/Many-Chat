@@ -3,11 +3,12 @@
 import { createAutomation, getAutomations } from "./queries"
 import { onCurrentUser } from "../user"
 
-export const createAutomations = async () => {
+export const createAutomations = async (id?:string) => {
     const currentUser = await onCurrentUser();
+    console.log("ABOUT TO CREATE")
     try{
-        const create = await createAutomation(currentUser.id);
-        if(create) return {status:200, data:"Automations created"}
+        const create = await createAutomation(currentUser.id, id);
+        if(create) return {status:200, data: 'Automation created', res: create}
         return {status:404, data:"Automation not created"}
 
     } catch(error){
