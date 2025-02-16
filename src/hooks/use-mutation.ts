@@ -13,7 +13,6 @@ import {
     queryKey?: string,
     onSuccess?: () => void
   ) => {
-    console.log("hewewewewe", queryKey, mutationKey)
     const client = useQueryClient()
     const { mutate, isPending } = useMutation({
       mutationKey,

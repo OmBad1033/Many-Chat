@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { AutomationDuoToneWhite } from "@/icons";
 import Loader from "../loader";
-import { useCreateAutomation } from "@/hooks/use-createAutomation";
+import { useCreateAutomation } from "@/hooks/use-automations";
 import { v4 } from "uuid";
 
 type Props = {};
