@@ -26,3 +26,13 @@ export const getMonth = (month: number) => {
   }
   return months[month-1];
 };
+
+export const duplicationValidation = (arr:string[], element: string) => {
+  if(!arr.find((t)=>t === element)){
+    arr.push(element)
+    return arr
+  } else {
+    arr = arr.filter((t)=>t !== element)
+    return arr
+  }
+}

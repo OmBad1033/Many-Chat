@@ -41,11 +41,7 @@ export const findAutomation = async (id: string) => {
     where: {
       id,
     },
-    select: {
-      id: true,
-      name: true, 
-      createdAt: true,
-      active: true,
+    include: {
       keywords: true,
       trigger: true,
       posts: true,
@@ -57,8 +53,8 @@ export const findAutomation = async (id: string) => {
         },
       },
     },
-  });
-};
+  })
+}
 
 export const updateAutomation = async (
   id: string,
