@@ -1,7 +1,11 @@
 import React from "react";
 import Sidebar from "@/components/global/sidebar";
 import InfoBar from "@/components/global/InfoBar";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import {
   PrefetchUserAutomations,
   PrefetchUserProfile,

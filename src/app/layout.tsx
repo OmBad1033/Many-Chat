@@ -29,7 +29,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ReduxProvider>
-              <ReactQueryProvider>{children}</ReactQueryProvider>
+              <ReactQueryProvider>
+                {children}
+               </ReactQueryProvider>
             </ReduxProvider>
             <Toaster />
           </ThemeProvider>

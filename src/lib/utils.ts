@@ -29,10 +29,10 @@ export const getMonth = (month: number) => {
 
 export const duplicationValidation = (arr:string[], element: string) => {
   if(!arr.find((t)=>t === element)){
-    arr.push(element)
+    arr.push(element) //if element is not in the array push
     return arr
   } else {
-    arr = arr.filter((t)=>t !== element)
+    arr = arr.filter((t)=>t !== element) //if element is in the array remove
     return arr
   }
 }

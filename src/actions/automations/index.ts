@@ -1,7 +1,9 @@
 "use server"
 
-import { createAutomation, findAutomation, getAutomations, updateAutomation } from "./queries"
+import { addKeyword, addTrigger, createAutomation, deleteKeywordQuery, findAutomation, getAutomations, updateAutomation } from "./queries"
 import { onCurrentUser } from "../user"
+import { addListener } from "./queries"
+import { autoBatchEnhancer } from "@reduxjs/toolkit"
 
 export const createAutomations = async (id?:string) => {
     const currentUser = await onCurrentUser();
@@ -30,7 +32,7 @@ export const getAllAutomations = async () => {
 }
 
 export const getAutomationInfo = async (id:string) => {
-    await onCurrentUser();
+    const user = await onCurrentUser();
     try{
         const automation = await findAutomation(id);
         if(automation) return {status:200, data:automation}
@@ -57,4 +59,58 @@ export const updateAutomationName = async (
             console.log(error);
             return {status:500, data:"Internal Server Error"}
         }
+}
+
+export const saveListener = async (
+    automationId: string, 
+    listener: 'SMARTAI' | 'MESSAGE',
+    prompt: string,
+    reply?: string
+) => {
+    await onCurrentUser();
+    try{
+        const create = await addListener(automationId, listener, prompt, reply);
+        if(create) return {status:200, data:'Automation data successfully updated'}
+        return {status:404, data:"Automation data not updated"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
+
+}
+
+export const saveTrigger = async (automationId: string, trigger:string[]) => {
+    await onCurrentUser();
+    try{
+        const create = await addTrigger(automationId, trigger);
+        if(create) return {status:200, data:'Automation data successfully updated'}
+        return {status:404, data:"Automation data not updated"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
+}
+
+export const saveKeyword = async (automationId: string, keyword:string) => {
+    await onCurrentUser();
+    try{
+        const create = await addKeyword(automationId, keyword);
+        if(create) return {status:200, data:'Keyword successfully updated'}
+        return {status:404, data:"Keyword not updated"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
+}
+
+export const deleteKeyword = async (keyWordId: string) => {
+    await onCurrentUser();
+    try{
+        const create = await deleteKeywordQuery(keyWordId);
+        if(create) return {status:200, data:'Keyword deleted updated'}
+        return {status:404, data:"Keyword not deleted"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
 }
