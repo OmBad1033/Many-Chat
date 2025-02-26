@@ -3,8 +3,14 @@ import AutomationBreadCrumb from "@/components/global/bread-crumbs/automations";
 import { Warning } from "@/icons";
 import Trigger from "@/components/global/automations/trigger";
 import { getAutomationInfo } from "@/actions/automations";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { PrefetchUserAutomation } from "@/react-query/prefetch";
+import ThenNode from "@/components/global/automations/then/node";
+import PostNode from "@/components/global/automations/post/node";
 
 type Props = {
   params: { id: string };
@@ -15,7 +21,7 @@ export async function generateMetaData({ params }: Props) {
   const info = await getAutomationInfo(params.id);
   console.log(info);
   return {
-    title: info.data
+    title: info.data,
   };
 }
 
@@ -35,6 +41,8 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
           <Trigger id={params.id} />
         </div>
+        <ThenNode id={params.id} />
+        <PostNode id={params.id}/>
       </div>
     </HydrationBoundary>
   );

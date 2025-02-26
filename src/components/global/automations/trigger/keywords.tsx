@@ -3,7 +3,7 @@ import { useKeywords } from "@/hooks/use-automations";
 import { useMutationDataState } from "@/hooks/use-mutation";
 import { useQueryAutomation } from "@/hooks/use-queries";
 import { X } from "lucide-react";
-import React, { use } from "react";
+import React from "react";
 
 type Props = {
   id: string;
@@ -14,7 +14,6 @@ function Keywords({ id }: Props) {
     useKeywords(id);
   const { latestVariable } = useMutationDataState(["add-keyword"]);
   const { data } = useQueryAutomation(id);
-  console.log("Controller", data?.data?.keywords, latestVariable);
   return (
     <div className="bg-background-80 flex flex-col gap-y-3 p-3 rounded-xl">
       <p className="text-sm text-text-secondary">
@@ -40,8 +39,6 @@ function Keywords({ id }: Props) {
                       />
                   </div>
                 )
-
-
           )}
           {latestVariable && latestVariable.status === 'pending' && (
             <div className="bg-background-90 flex items-center gap-x-2 capitalize text-text-secondary py-1 px-4 rounded-full">

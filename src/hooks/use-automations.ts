@@ -1,4 +1,12 @@
-import { createAutomations, deleteKeyword, saveKeyword, saveListener, saveTrigger, updateAutomationName } from "@/actions/automations";
+import {
+  createAutomations,
+  deleteKeyword,
+  saveKeyword,
+  saveListener,
+  savePosts,
+  saveTrigger,
+  updateAutomationName,
+} from "@/actions/automations";
 import { useMutationData } from "./use-mutation";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
@@ -34,82 +42,141 @@ export const useEditAutomation = (id: string) => {
         inputRef.current &&
         !inputRef.current.contains(event.target as Node | null)
       ) {
-        if (inputRef.current.value !== '') {
-            mutate({ name: inputRef.current.value })
-          } else {
-            disableEdit()
-          }
+        if (inputRef.current.value !== "") {
+          mutate({ name: inputRef.current.value });
+        } else {
+          disableEdit();
+        }
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-    }
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return { edit, enableEdit, disableEdit, isPending, inputRef };
 };
 
 export const useListener = (id: string) => {
-    const [listener, setListener] = useState<'MESSAGE' | 'SMARTAI' | null>(null)
-    const promptSchema = z.object({
-        prompt: z.string().min(1),
-        reply: z.string()
-    })
-    const {isPending, mutate} = useMutationData(
-        ['create-listener'],//mutation key
-        (data: {prompt:string; reply: string}) => saveListener(id, listener || "MESSAGE", data.prompt, data.reply), //mutation fnc
-        'automation-info', //query key
-    )
+  const [listener, setListener] = useState<"MESSAGE" | "SMARTAI" | null>(null);
+  const promptSchema = z.object({
+    prompt: z.string().min(1),
+    reply: z.string(),
+  });
+  const { isPending, mutate } = useMutationData(
+    ["create-listener"], //mutation key
+    (data: { prompt: string; reply: string }) =>
+      saveListener(id, listener || "MESSAGE", data.prompt, data.reply), //mutation fnc
+    "automation-info" //query key
+  );
 
-    const {errors, onFormSubmit, register, watch, reset} = useZodForm(promptSchema, mutate)
+  const { errors, onFormSubmit, register, watch, reset } = useZodForm(
+    promptSchema,
+    mutate
+  );
 
-    const onSetListener = (type: 'SMARTAI' | 'MESSAGE') => setListener(type)
+  const onSetListener = (type: "SMARTAI" | "MESSAGE") => setListener(type);
 
-    return {errors, onFormSubmit, register, watch, reset, isPending, onSetListener, listener}
-}
+  return {
+    errors,
+    onFormSubmit,
+    register,
+    watch,
+    reset,
+    isPending,
+    onSetListener,
+    listener,
+  };
+};
 
-export const useTriggers = (id:string) => {
-  const types = useAppSelector((state) => state.AutomationReducer.trigger?.types)
-  const dispatch : AppDispatch = useDispatch();
-  const onSetTrigger = (type: 'COMMENT' | 'DM') => dispatch(TRIGGER({trigger: {type}}))
-  const {isPending, mutate} = useMutationData(
-    ['add-trigger'],//mutation key
-    (data: {types: string[]})=> saveTrigger(id, data.types), //mutation fnc
-    'automation-info', //query key
-  )
-  const onSaveTrigger = () => mutate({types});
+export const useTriggers = (id: string) => {
+  const types = useAppSelector(
+    (state) => state.AutomationReducer.trigger?.types
+  );
+  const dispatch: AppDispatch = useDispatch();
+  const onSetTrigger = (type: "COMMENT" | "DM") =>
+    dispatch(TRIGGER({ trigger: { type } }));
+  const { isPending, mutate } = useMutationData(
+    ["add-trigger"], //mutation key
+    (data: { types: string[] }) => saveTrigger(id, data.types), //mutation fnc
+    "automation-info" //query key
+  );
+  const onSaveTrigger = () => mutate({ types });
   return {
     types,
     onSetTrigger, //save in redux store
     onSaveTrigger, //save in db
-    isPending
-  }
-  
-}
+    isPending,
+  };
+};
 
-export const useKeywords =  (id: string) => {
-  const [keyword, setKeyword] = useState('');
-  const {mutate} = useMutationData(
-    ['add-keyword'],
-    (data: {keyword:string}) => saveKeyword(id, data.keyword),
-    'automation-info',
-    () => setKeyword('')
-  )
-  const {mutate: deleteMutation} = useMutationData(
-    ['delete-keyword'],
-    (data: {id: string}) => deleteKeyword(id),
-    'automation-info'
-  )
-  const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value);
+export const useKeywords = (id: string) => {
+  const [keyword, setKeyword] = useState("");
+  const { mutate } = useMutationData(
+    ["add-keyword"],
+    (data: { keyword: string }) => saveKeyword(id, data.keyword),
+    "automation-info",
+    () => setKeyword("")
+  );
+  const { mutate: deleteMutation } = useMutationData(
+    ["delete-keyword"],
+    (data: { id: string }) => deleteKeyword(id),
+    "automation-info"
+  );
+  const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setKeyword(e.target.value);
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      mutate({keyword})
-      setKeyword('')
+    if (e.key === "Enter") {
+      mutate({ keyword });
+      setKeyword("");
     }
-  }
+  };
 
   return {
-    keyword, onValueChange, onKeyPress, deleteMutation
-  }
-}
+    keyword,
+    onValueChange,
+    onKeyPress,
+    deleteMutation,
+  };
+};
+
+export const useAutomationPosts = (id: string) => {
+  const [posts, setPosts] = useState<
+    {
+      postid: string;
+      caption: string;
+      media: string;
+      mediaType: "IMAGE" | "VIDEO" | "CAROSEL_ALBUM";
+    }[]
+  >([]);
+  const onSelect = (
+    post: {
+      postid: string;
+      caption: string;
+      media: string;
+      mediaType: "IMAGE" | "VIDEO" | "CAROSEL_ALBUM";
+    }[]
+  ) => {
+    setPost((prevItems) => {
+      if (prevItems.find((p) => p.postid === post.postid)) {
+        return prevItems.filter((item) => item.postid !== post.postid);
+      } else {
+        return [...prevItems, post];
+      }
+    });
+   
+  };
+  const { mutate, isPending } = useMutationData(
+    ["attach-posts"],
+    () => savePosts(id, post),
+    "automation-info",
+    () => setPost([])
+  );
+  return {
+    posts,
+    onSelect,
+    mutate,
+    isPending,
+  };
+};

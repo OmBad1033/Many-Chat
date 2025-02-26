@@ -1,9 +1,10 @@
 "use server"
 
-import { addKeyword, addTrigger, createAutomation, deleteKeywordQuery, findAutomation, getAutomations, updateAutomation } from "./queries"
+import { addKeyword, addPosts, addTrigger, createAutomation, deleteKeywordQuery, findAutomation, getAutomations, updateAutomation } from "./queries"
 import { onCurrentUser } from "../user"
 import { addListener } from "./queries"
 import { autoBatchEnhancer } from "@reduxjs/toolkit"
+import { findUser } from "../user/queries"
 
 export const createAutomations = async (id?:string) => {
     const currentUser = await onCurrentUser();
@@ -113,4 +114,41 @@ export const deleteKeyword = async (keyWordId: string) => {
         console.log(error);
         return {status:500, data:"Internal Server Error"}
     }
+}
+
+export const getProfilePosts = async () => {
+    const user = await onCurrentUser();
+    try{
+        const profile = await findUser(user.id);
+        const posts = await fetch(
+            `${process.env.INSTAGRAM_BASE_URL}/me/media?fields=id,caption,media_url,media_type,timestamp&limit=10&access_token=${profile?.integrations[0].token}`
+        );
+        const parsed = await posts.json();
+        if(parsed) return {status:200, data:parsed}
+        return {status:404, data:"🍎 No posts found"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
+}
+
+export const savePosts = async (
+    automationId: string,
+    posts:{
+        postid: string;
+        caption: string;
+        media: string;
+        mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM';
+    }[]
+) => {
+    await onCurrentUser();
+    try{
+        const create = await addPosts(automationId, posts);
+        if(create) return {status:200, data:'Posts successfully updated'}
+        return {status:404, data:"Posts not updated"}
+    } catch(error) {
+        console.log(error);
+        return {status:500, data:"Internal Server Error"}
+    }
+
 }

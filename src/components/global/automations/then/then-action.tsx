@@ -25,7 +25,7 @@ function ThenAction({ id }: Props) {
     listener: Listener,
   } = useListener(id);
   return (
-    <TriggerButton label="Trigger">
+    <TriggerButton label="Then">
       <div className="flex flex-col gap-y-2">
         {AUTOMATION_LISTENERS.map((listener) =>
           listener.type === "SMARTAI" ? (
