@@ -62,7 +62,7 @@ export default async function AutomationBreadCrumb({ id }: Props) {
           </p>
         </div>
       </div>
-      <ActiveAutomationButton />
+      <ActiveAutomationButton id={id}/>
     </div>
   );
 }
