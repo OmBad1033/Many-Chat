@@ -23,15 +23,13 @@ type Props = {
 
 function InfoBar({ slug }: Props) {
   const { page } = usePath();
-
-  console.log("InfoBar slug page", slug, page);
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug;
   return (
     true && (
       <div className="flex flex-col">
         <div className="flex gap-x-3 lg:gap-x-5 justify-end">
           <span className="lg:hidden flex items-center flex-1 gap-x-2">
-            <Sheet trigger={<Menu />} className="lg:hidden" side='left'>
+            <Sheet trigger={<Menu />} className="lg:hidden" side="left">
               <div className="w-full h-full flex flex-col">
                 <div className="flex gap-x-2 items-center p-5 justify-center">
                   <Logo />
@@ -55,7 +53,7 @@ function InfoBar({ slug }: Props) {
                     <p className="text-[#9B9CA0]">Help</p>
                   </div>
                 </div>
-                <SubcriptionPlan type={"PRO"}>
+                <SubcriptionPlan>
                   <div className="flex-1 flex flex-col justify-end">
                     <UpgradeCard />
                   </div>
@@ -67,10 +65,7 @@ function InfoBar({ slug }: Props) {
           <CreateAutomation />
           <Notifications />
         </div>
-        <MainBreadCrumb 
-          page={page === slug ? 'Home' : page}
-          slug={slug}
-        />
+        <MainBreadCrumb page={page === slug ? "Home" : page} slug={slug} />
       </div>
     )
   );
