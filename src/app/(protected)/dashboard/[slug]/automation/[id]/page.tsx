@@ -19,7 +19,6 @@ type Props = {
 //WIP: Set some metadata
 export async function generateMetaData({ params }: Props) {
   const info = await getAutomationInfo(params.id);
-  console.log(info);
   return {
     title: info.data,
   };

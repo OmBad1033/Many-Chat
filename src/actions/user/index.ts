@@ -4,8 +4,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { createUser, findUser, updateSubscription } from "./queries";
 import { refreshToken } from "@/lib/fetch";
-import { updateIntegration } from "../integrations";
 import { stripe } from "@/app/(protected)/api/payment/route";
+import { updateIntegration } from "../integrations/queries";
 
 export const onCurrentUser = async () => {
   const user = await currentUser();
